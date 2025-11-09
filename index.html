@@ -6,93 +6,148 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <style>
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.07);
+            --glass-border: rgba(255, 255, 255, 0.12);
+            --shadow: 0 8px 32px rgba(0,0,0,0.35);
+            --gradient: linear-gradient(135deg, #5561ff, #0bc0ff);
+        }
+
         body {
-            background: var(--tg-theme-bg-color);
-            color: var(--tg-theme-text-color);
-            font-family: Inter, sans-serif;
+            background: #0a0a0b;
+            font-family: "Inter", sans-serif;
+            color: white;
             margin: 0;
+            padding: 18px;
+            overflow-x: hidden;
+            animation: fadeIn .4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px);}
+            to   { opacity: 1; transform: translateY(0);}
+        }
+
+        .header {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 22px;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .glass {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
             padding: 20px;
+            box-shadow: var(--shadow);
+            animation: slideUp .5s ease;
+        }
+
+        @keyframes slideUp {
+            from {opacity:0; transform:translateY(20px);}
+            to   {opacity:1; transform:translateY(0);}
         }
 
         .profile {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 25px;
+            display:flex;
+            align-items:center;
+            gap:15px;
+            margin-bottom: 20px;
         }
 
         .pfp {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: var(--tg-theme-secondary-bg-color);
-        }
-
-        .info {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .name {
-            font-size: 20px;
-            font-weight: 600;
+            width:60px;
+            height:60px;
+            border-radius:50%;
+            background: #2e2e33;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            font-size:26px;
+            font-weight:600;
         }
 
         .username {
-            color: var(--tg-theme-hint-color);
+            color: #9aa0ae;
+            margin-top: 4px;
         }
 
         textarea {
-            width: 100%;
-            padding: 14px;
-            border-radius: 12px;
-            background: var(--tg-theme-secondary-bg-color);
-            border: 1px solid var(--tg-theme-hint-color);
-            resize: none;
-            margin-bottom: 20px;
-            color: var(--tg-theme-text-color);
-            font-size: 16px;
+            width:100%;
+            background: rgba(255,255,255,0.05);
+            border:1px solid rgba(255,255,255,0.15);
+            border-radius:15px;
+            padding:15px;
+            color:white;
+            font-size:16px;
+            resize:none;
+            margin-bottom:15px;
+            outline:none;
+            transition:.15s;
+        }
+        textarea:focus {
+            border-color:#5b76ff;
+            background: rgba(255,255,255,0.08);
         }
 
-        button {
-            width: 100%;
-            padding: 14px;
-            border: none;
-            border-radius: 12px;
-            background: var(--tg-theme-button-color);
-            color: var(--tg-theme-button-text-color);
-            font-size: 17px;
-            font-weight: 600;
+        .btn {
+            width:100%;
+            padding:15px;
+            border-radius:15px;
+            background: var(--gradient);
+            color:white;
+            border:none;
+            font-size:17px;
+            font-weight:600;
+            cursor:pointer;
+            transition:.2s;
+        }
+        .btn:active {
+            transform: scale(0.97);
+            opacity:.85;
         }
     </style>
 </head>
 <body>
 
-<div class="profile">
-    <div class="pfp"></div>
-    <div class="info">
-        <div class="name" id="name"></div>
-        <div class="username" id="username"></div>
-    </div>
-</div>
+<div class="header">Поддержка</div>
 
-<textarea id="text" rows="4" placeholder="Введите ваш вопрос..."></textarea>
-<button onclick="sendMsg()">Отправить</button>
+<div class="glass">
+    <div class="profile">
+        <div class="pfp" id="pfp">?</div>
+        <div>
+            <div id="name" style="font-size:20px;font-weight:600;">Загрузка...</div>
+            <div id="username" class="username"></div>
+        </div>
+    </div>
+
+    <textarea id="text" rows="4" placeholder="Введите ваш вопрос..."></textarea>
+    <button class="btn" onclick="sendMsg()">Отправить</button>
+</div>
 
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <script>
     let tg = window.Telegram.WebApp;
     tg.expand();
 
-    // ✅ Авто-логин
-    let u = tg.initDataUnsafe.user;
-    document.getElementById("name").innerText = u.first_name;
+    const u = tg.initDataUnsafe.user;
+
+    // ✅ Авто-профиль как в Fragment
+    document.getElementById("name").innerText = u.first_name || "User";
     document.getElementById("username").innerText = u.username ? "@" + u.username : "Без username";
 
-    function sendMsg() {
-        let text = document.getElementById("text").value;
+    // Аватарка (инициал в кружке)
+    document.getElementById("pfp").innerText = (u.first_name || "?")[0].toUpperCase();
 
-        if (!text.trim()) {
+    function sendMsg() {
+        let text = document.getElementById("text").value.trim();
+
+        if (!text) {
             tg.showAlert("Введите сообщение");
             return;
         }
