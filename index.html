@@ -2,252 +2,258 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Поддержка</title>
+    <title>Deveam Support</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <style>
+        :root {
+            --bg: #0b0c10;
+            --card: rgba(255,255,255,0.07);
+            --border: rgba(255,255,255,0.13);
+            --accent: #5662ff;
+            --accent2: #23c4ff;
+            --red: #ff4d4d;
+        }
+
         body {
-            background: #0a0a0b;
-            color: white;
-            font-family: Inter, sans-serif;
             margin: 0;
             padding: 20px;
+            font-family: Inter, sans-serif;
+            background: var(--bg);
+            color: white;
             overflow-x: hidden;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 480px;
+            width: 100%;
         }
 
         .header {
-            font-size: 28px;
-            font-weight: 800;
-            margin-bottom: 20px;
-            background: linear-gradient(135deg, #5865f2, #0bc0ff);
+            font-size: 26px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
             -webkit-background-clip: text;
             color: transparent;
+            text-align: center;
         }
 
         .glass {
-            background: rgba(255,255,255,0.06);
-            border: 1px solid rgba(255,255,255,0.12);
+            background: var(--card);
+            border: 1px solid var(--border);
             border-radius: 20px;
             padding: 18px;
-            margin-bottom: 25px;
-            box-shadow: 0 0 25px rgba(0,150,255,0.08);
-            backdrop-filter: blur(20px);
+            margin-bottom: 20px;
+            backdrop-filter: blur(14px);
         }
 
-        textarea {
+        textarea, input {
             width: 100%;
-            padding: 14px;
+            padding: 12px;
             border-radius: 14px;
-            font-size: 16px;
-            background: rgba(255,255,255,0.05);
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.15);
             color: white;
-            border: 1px solid rgba(255,255,255,0.2);
-            margin-bottom: 15px;
             resize: none;
+            font-size: 15px;
+            margin-bottom: 12px;
         }
 
         .btn {
             width: 100%;
-            padding: 14px;
-            background: linear-gradient(135deg, #bb3f6f, #e9608a);
-            font-size: 17px;
-            font-weight: 600;
+            padding: 13px;
             border-radius: 14px;
+            font-size: 16px;
+            font-weight: 600;
+            background: linear-gradient(135deg, #bb3f6f, #e9608a);
             border: none;
             color: white;
-            cursor: pointer;
-        }
-
-        .ticket {
-            padding: 14px;
-            background: rgba(255,255,255,0.05);
-            border-radius: 14px;
-            border: 1px solid rgba(255,255,255,0.1);
-            margin-bottom: 12px;
             transition: 0.2s;
         }
 
-        .ticket:hover {
-            box-shadow: 0 0 18px rgba(0,150,255,0.18);
+        .btn:hover { opacity: 0.85; }
+
+        .ticket {
+            padding: 14px;
+            background: rgba(255,255,255,0.06);
+            border-radius: 16px;
+            border: 1px solid rgba(255,255,255,0.12);
+            margin-bottom: 14px;
+        }
+
+        .ticket-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            opacity: 0.8;
         }
 
         .status {
-            margin-top: 6px;
+            margin-top: 8px;
             font-size: 14px;
-            opacity: 0.8;
         }
 
         .open { color: #4da3ff; }
         .pending { color: #ffc34d; }
         .closed { color: #7dff73; }
 
-        .adm-btns button {
-            margin-right: 5px;
-            margin-top: 8px;
-            padding: 6px 10px;
-            border-radius: 8px;
-            border: none;
+        .admin-controls {
+            margin-top: 12px;
+            display: flex;
+            gap: 8px;
+        }
+
+        .admin-btn {
+            flex: 1;
+            padding: 10px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: rgba(255,255,255,0.05);
+            color: white;
+            font-size: 14px;
             cursor: pointer;
         }
 
-        .small-input {
-            width: 100%;
-            margin-top: 6px;
-            padding: 8px;
-            border-radius: 10px;
-            border: 1px solid rgba(255,255,255,0.2);
-            background: rgba(255,255,255,0.07);
-            color: white;
-        }
-
+        .admin-btn.red { color: var(--red); border-color: var(--red); }
+        .admin-btn.blue { color: #4da3ff; border-color: #4da3ff; }
+        .admin-btn.yellow { color: #ffc34d; border-color: #ffc34d; }
     </style>
 </head>
 <body>
 
-<div class="header">Поддержка Deveam</div>
+<div class="container">
+    <div class="header">Deveam Support</div>
 
-<div class="glass">
-    <textarea id="text" placeholder="Введите ваш вопрос..."></textarea>
-    <button class="btn" onclick="sendTicket()">Отправить</button>
-</div>
+    <div id="userPanel" class="glass">
+        <textarea id="text" rows="3" placeholder="Введите ваш вопрос..."></textarea>
+        <button class="btn" onclick="sendTicket()">Отправить</button>
+    </div>
 
-<div class="glass" id="adminPanel" style="display:none;">
-    <h3>Админ-Панель</h3>
-    <div id="ticketsAdmin"></div>
-</div>
+    <div id="adminReplyPanel" class="glass" style="display:none;">
+        <input id="replyInput" placeholder="Ответить на тикет...">
+        <button class="btn" onclick="sendReply()">Отправить ответ</button>
+    </div>
 
-<div class="glass">
-    <div id="tickets"></div>
+    <div class="glass">
+        <div id="tickets"></div>
+    </div>
 </div>
 
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <script>
     let tg = window.Telegram.WebApp;
     tg.expand();
+
     let user = tg.initDataUnsafe.user;
+    let ADMIN = 8339987136;
+    let isAdmin = (user.id == ADMIN);
 
-    const ADMIN = 8339987136;
-    const API = "https://gimmicky-seamlessly-reinaldo.ngrok-free.dev";
+    const API = "https://gimmicky-seamlessly-reinaldo.ngrok-free.dev"; // ⭐ ВСТАВЬ СВОЙ NGROK
 
-    if (user.id === ADMIN) {
-        document.getElementById("adminPanel").style.display = "block";
+    let selectedTicket = null;
+
+    if (isAdmin) {
+        document.getElementById("userPanel").style.display = "none";
+        document.getElementById("adminReplyPanel").style.display = "block";
     }
 
     function sendTicket() {
-    let text = document.getElementById("text").value.trim();
-    if (!text) {
-        tg.showAlert("Введите сообщение!");
-        return;
+        let text = document.getElementById("text").value.trim();
+        if (!text) return tg.showAlert("Введите сообщение!");
+
+        fetch(API + "/new_ticket", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({
+                user_id: user.id,
+                username: user.username || "",
+                text: text
+            })
+        });
+
+        document.getElementById("text").value = "";
+        tg.showPopup({title: "✅ Отправлено", message: "Ваш тикет создан"});
     }
 
-    fetch(API + "/new_ticket", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({
-            user_id: user.id,
-            username: user.username || "",
-            text: text
-        })
-    }).catch(err => console.log(err));
+    function renderTickets(tickets) {
+        let box = document.getElementById("tickets");
+        box.innerHTML = "";
 
-    document.getElementById("text").value = "";
-    tg.showPopup({title: "✅ Готово", message: "Ваш тикет отправлен"});
-}
+        tickets.forEach(t => {
+            let div = document.createElement("div");
+            div.className = "ticket";
+
+            div.innerHTML = `
+                <div class="ticket-header">
+                    <span>#${t.id}</span>
+                    <span>@${t.username}</span>
+                </div>
+
+                <div style="margin-top: 8px; font-size:15px;">${t.text}</div>
+
+                <div class="status ${t.status}">
+                    ${t.status === "open" ? "🔵 Открыт" :
+                      t.status === "pending" ? "🟡 На рассмотрении" :
+                      "✅ Закрыт"}
+                </div>
+            `;
+
+            if (isAdmin) {
+                let controls = document.createElement("div");
+                controls.className = "admin-controls";
+
+                controls.innerHTML = `
+                    <button class="admin-btn blue" onclick="setStatus(${t.id}, 'open')">Открыт</button>
+                    <button class="admin-btn yellow" onclick="setStatus(${t.id}, 'pending')">Рассмотрение</button>
+                    <button class="admin-btn red" onclick="setStatus(${t.id}, 'closed')">Закрыт</button>
+                `;
+
+                div.appendChild(controls);
+
+                div.onclick = () => {
+                    selectedTicket = t.id;
+                    document.getElementById("replyInput").value = "";
+                };
+            }
+
+            box.appendChild(div);
+        });
+    }
 
     function loadTickets() {
         fetch(API + "/tickets?user_id=" + user.id)
         .then(r => r.json())
-        .then(tickets => {
-            let box = document.getElementById("tickets");
-            box.innerHTML = "";
-
-            tickets.forEach(t => {
-                let div = document.createElement("div");
-                div.className = "ticket";
-                div.innerHTML = `
-                    <b>#${t.id}</b><br>
-                    <div>${t.text}</div>
-
-                    ${t.answer ? `<div style="margin-top:8px;color:#8efc96;">Ответ админа: ${t.answer}</div>` : ""}
-
-                    <div class="status ${t.status}">
-                        ${t.status === "open" ? "🔵 Открыт" :
-                          t.status === "pending" ? "🟡 На рассмотрении" :
-                          "✅ Закрыт"}
-                    </div>
-
-                    <button class="btn" style="margin-top:8px;" onclick="closeTicket(${t.id})">Закрыть тикет</button>
-                `;
-                box.appendChild(div);
-            });
-        });
-    }
-
-    function closeTicket(id) {
-        fetch(API + "/close", {
-            method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({ id })
-        });
-    }
-
-    function loadAdmin() {
-        if (user.id !== ADMIN) return;
-
-        fetch(API + "/tickets?user_id=" + user.id)
-        .then(r => r.json())
-        .then(tickets => {
-            let box = document.getElementById("ticketsAdmin");
-            box.innerHTML = "";
-
-            tickets.forEach(t => {
-                let div = document.createElement("div");
-                div.className = "ticket";
-
-                div.innerHTML = `
-                    <b>#${t.id} — @${t.username}</b><br>
-                    <div>${t.text}</div>
-
-                    <input id="answer${t.id}" class="small-input" placeholder="Ответить..." value="${t.answer || ""}">
-
-                    <div class="adm-btns">
-                        <button onclick="setStatus(${t.id}, 'open')">Открыт</button>
-                        <button onclick="setStatus(${t.id}, 'pending')">На рассмотрении</button>
-                        <button onclick="setStatus(${t.id}, 'closed')">Закрыт</button>
-                        <button onclick="reply(${t.id})">Ответить</button>
-                    </div>
-                `;
-
-                box.appendChild(div);
-            });
-        });
+        .then(renderTickets);
     }
 
     function setStatus(id, status) {
         fetch(API + "/update_status", {
             method: "POST",
             headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({ id, status })
+            body: JSON.stringify({id, status})
         });
     }
 
-    function reply(id) {
-        let text = document.getElementById("answer" + id).value;
+    function sendReply() {
+        if (!selectedTicket) return tg.showAlert("Выберите тикет!");
 
         fetch(API + "/reply", {
             method: "POST",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify({
-                id,
-                answer: text
+                id: selectedTicket,
+                answer: document.getElementById("replyInput").value
             })
         });
 
-        tg.HapticFeedback.notificationOccurred("success");
+        tg.showPopup({title: "✅ Отправлено", message: "Ответ отправлен"});
     }
 
-    setInterval(loadTickets, 1000);
-    setInterval(loadAdmin, 1000);
+    setInterval(loadTickets, 1500);
+    loadTickets();
 </script>
 
 </body>
