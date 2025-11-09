@@ -6,161 +6,135 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <style>
-        :root {
-            --glass-bg: rgba(255, 255, 255, 0.07);
-            --glass-border: rgba(255, 255, 255, 0.12);
-            --shadow: 0 8px 32px rgba(0,0,0,0.35);
-            --gradient: linear-gradient(135deg, #5561ff, #0bc0ff);
-        }
-
         body {
             background: #0a0a0b;
-            font-family: "Inter", sans-serif;
             color: white;
+            font-family: Inter, sans-serif;
             margin: 0;
-            padding: 18px;
-            overflow-x: hidden;
-            animation: fadeIn .4s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px);}
-            to   { opacity: 1; transform: translateY(0);}
+            padding: 20px;
         }
 
         .header {
-            font-size: 28px;
+            font-size: 26px;
             font-weight: 700;
-            margin-bottom: 22px;
-            background: var(--gradient);
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #5561ff, #0bc0ff);
             -webkit-background-clip: text;
             color: transparent;
         }
 
         .glass {
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1);
             border-radius: 20px;
-            padding: 20px;
-            box-shadow: var(--shadow);
-            animation: slideUp .5s ease;
-        }
-
-        @keyframes slideUp {
-            from {opacity:0; transform:translateY(20px);}
-            to   {opacity:1; transform:translateY(0);}
-        }
-
-        .profile {
-            display:flex;
-            align-items:center;
-            gap:15px;
-            margin-bottom: 20px;
-        }
-
-        .pfp {
-            width:60px;
-            height:60px;
-            border-radius:50%;
-            background: #2e2e33;
-            display:flex;
-            justify-content:center;
-            align-items:center;
-            font-size:26px;
-            font-weight:600;
-        }
-
-        .username {
-            color: #9aa0ae;
-            margin-top: 4px;
+            padding: 18px;
+            margin-bottom: 25px;
+            backdrop-filter: blur(20px);
         }
 
         textarea {
-            width:100%;
+            width: 100%;
+            padding: 14px;
+            border-radius: 14px;
+            font-size: 16px;
             background: rgba(255,255,255,0.05);
-            border:1px solid rgba(255,255,255,0.15);
-            border-radius:15px;
-            padding:15px;
-            color:white;
-            font-size:16px;
-            resize:none;
-            margin-bottom:15px;
-            outline:none;
-            transition:.15s;
-        }
-        textarea:focus {
-            border-color:#5b76ff;
-            background: rgba(255,255,255,0.08);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.2);
+            margin-bottom: 15px;
+            resize: none;
         }
 
         .btn {
-            width:100%;
-            padding:15px;
-            border-radius:15px;
-            background: var(--gradient);
-            color:white;
-            border:none;
-            font-size:17px;
-            font-weight:600;
-            cursor:pointer;
-            transition:.2s;
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #bb3f6f, #e9608a);
+            font-size: 17px;
+            font-weight: 600;
+            border-radius: 14px;
+            border: none;
+            color: white;
         }
-        .btn:active {
-            transform: scale(0.97);
-            opacity:.85;
+
+        .ticket {
+            padding: 14px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 14px;
+            border: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 12px;
         }
+
+        .status {
+            margin-top: 6px;
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        .open { color: #4da3ff; }
+        .pending { color: #ffc34d; }
+        .closed { color: #7dff73; }
     </style>
 </head>
 <body>
 
-<div class="header">Поддержка</div>
+<div class="header">Поддержка Deveam</div>
 
 <div class="glass">
-    <div class="profile">
-        <div class="pfp" id="pfp">?</div>
-        <div>
-            <div id="name" style="font-size:20px;font-weight:600;">Загрузка...</div>
-            <div id="username" class="username"></div>
-        </div>
-    </div>
+    <textarea id="text" placeholder="Введите ваш вопрос..."></textarea>
+    <button class="btn" onclick="sendTicket()">Отправить</button>
+</div>
 
-    <textarea id="text" rows="4" placeholder="Введите ваш вопрос..."></textarea>
-    <button class="btn" onclick="sendMsg()">Отправить</button>
+<div class="glass">
+    <div id="tickets"></div>
 </div>
 
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <script>
     let tg = window.Telegram.WebApp;
     tg.expand();
+    let user = tg.initDataUnsafe.user;
 
-    const u = tg.initDataUnsafe.user;
-
-    // ✅ Авто-профиль как в Fragment
-    document.getElementById("name").innerText = u.first_name || "User";
-    document.getElementById("username").innerText = u.username ? "@" + u.username : "Без username";
-
-    // Аватарка (инициал в кружке)
-    document.getElementById("pfp").innerText = (u.first_name || "?")[0].toUpperCase();
-
-    function sendMsg() {
+    function sendTicket() {
         let text = document.getElementById("text").value.trim();
+        if (!text) return tg.showAlert("Введите сообщение!");
 
-        if (!text) {
-            tg.showAlert("Введите сообщение");
-            return;
-        }
+        fetch("https://YOUR_SERVER/new_ticket", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({
+                user_id: user.id,
+                username: user.username,
+                text: text
+            })
+        });
 
-        tg.sendData(JSON.stringify({
-            user_id: u.id,
-            username: u.username || "",
-            first_name: u.first_name,
-            text: text
-        }));
-
-        tg.close();
+        document.getElementById("text").value = "";
     }
+
+    function loadTickets() {
+        fetch("https://YOUR_SERVER/tickets?user_id=" + user.id)
+        .then(r => r.json())
+        .then(tickets => {
+            let box = document.getElementById("tickets");
+            box.innerHTML = "";
+
+            tickets.forEach(t => {
+                let div = document.createElement("div");
+                div.className = "ticket";
+                div.innerHTML = `
+                    <div>${t.text}</div>
+                    <div class="status ${t.status}">
+                        ${t.status === "open" ? "🔵 Открыт" :
+                          t.status === "pending" ? "🟡 На рассмотрении" :
+                          "✅ Закрыт"}
+                    </div>
+                `;
+                box.appendChild(div);
+            });
+        });
+    }
+
+    setInterval(loadTickets, 1500);
+    loadTickets();
 </script>
 
 </body>
