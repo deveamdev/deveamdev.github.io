@@ -6,163 +6,190 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <style>
-        :root {
-            --bg: #0b0c10;
-            --card: rgba(255,255,255,0.07);
-            --border: rgba(255,255,255,0.13);
-            --accent: #5662ff;
-            --accent2: #23c4ff;
-            --red: #ff4d4d;
-        }
-
         body {
             margin: 0;
-            padding: 20px;
+            padding: 0;
+            background: #0d0e10;
+            color: #fff;
             font-family: Inter, sans-serif;
-            background: var(--bg);
-            color: white;
-            overflow-x: hidden;
             display: flex;
             justify-content: center;
         }
 
-        .container {
-            max-width: 480px;
+        .wrap {
             width: 100%;
+            max-width: 420px;
+            padding: 20px 18px 40px;
         }
 
-        .header {
-            font-size: 26px;
+        .title {
+            font-size: 23px;
             font-weight: 700;
-            margin-bottom: 15px;
-            background: linear-gradient(135deg, var(--accent), var(--accent2));
-            -webkit-background-clip: text;
-            color: transparent;
             text-align: center;
+            margin-bottom: 22px;
+            letter-spacing: -0.3px;
+            color: #ffffff;
         }
 
-        .glass {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 18px;
-            margin-bottom: 20px;
-            backdrop-filter: blur(14px);
-        }
-
-        textarea, input {
-            width: 100%;
-            padding: 12px;
+        /* ==== INPUT FRAGMENT STYLE ==== */
+        .input-box {
+            background: #111214;
+            border: 1px solid #1b1c1f;
             border-radius: 14px;
-            background: rgba(255,255,255,0.06);
-            border: 1px solid rgba(255,255,255,0.15);
-            color: white;
-            resize: none;
-            font-size: 15px;
-            margin-bottom: 12px;
-        }
-
-        .btn {
-            width: 100%;
-            padding: 13px;
-            border-radius: 14px;
-            font-size: 16px;
-            font-weight: 600;
-            background: linear-gradient(135deg, #bb3f6f, #e9608a);
-            border: none;
-            color: white;
-            transition: 0.2s;
-        }
-
-        .btn:hover { opacity: 0.85; }
-
-        .ticket {
             padding: 14px;
-            background: rgba(255,255,255,0.06);
-            border-radius: 16px;
-            border: 1px solid rgba(255,255,255,0.12);
             margin-bottom: 14px;
         }
 
-        .ticket-header {
-            display: flex;
-            justify-content: space-between;
-            font-size: 14px;
-            opacity: 0.8;
+        textarea {
+            width: 100%;
+            height: 80px;
+            background: transparent;
+            border: none;
+            outline: none;
+            resize: none;
+            color: #fff;
+            font-size: 15px;
+            font-family: inherit;
+        }
+
+        textarea::placeholder {
+            color: #6d6d6d;
+        }
+
+        /* ==== BUTTON FRAGMENT ==== */
+        .btn {
+            width: 100%;
+            background: linear-gradient(135deg, #5865f2, #3c45c8);
+            padding: 14px;
+            border-radius: 14px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 16px;
+            border: none;
+            margin-bottom: 22px;
+            color: white;
+            cursor: pointer;
+        }
+        .btn:active { opacity: 0.85; }
+
+        /* ==== CARD LIST ==== */
+        .card {
+            background: #111214;
+            border: 1px solid #1b1c1f;
+            border-radius: 14px;
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+
+        .ticket-id {
+            font-size: 15px;
+            opacity: 0.6;
+            margin-bottom: 6px;
+        }
+
+        .ticket-text {
+            font-size: 15px;
+            margin-bottom: 10px;
+            line-height: 1.35;
         }
 
         .status {
-            margin-top: 8px;
             font-size: 14px;
+            font-weight: 600;
         }
 
         .open { color: #4da3ff; }
-        .pending { color: #ffc34d; }
-        .closed { color: #7dff73; }
+        .pending { color: #f7c843; }
+        .closed { color: #65d96a; }
 
-        .admin-controls {
-            margin-top: 12px;
+        /* ===== ADMIN BUTTONS ===== */
+        .admin-buttons {
             display: flex;
             gap: 8px;
+            margin-top: 10px;
         }
 
-        .admin-btn {
+        .adm-btn {
             flex: 1;
-            padding: 10px;
+            background: #1b1c1f;
             border-radius: 12px;
-            border: 1px solid var(--border);
-            background: rgba(255,255,255,0.05);
-            color: white;
+            padding: 10px;
+            color: #fff;
+            text-align: center;
             font-size: 14px;
             cursor: pointer;
+            border: 1px solid #2a2b2e;
         }
 
-        .admin-btn.red { color: var(--red); border-color: var(--red); }
-        .admin-btn.blue { color: #4da3ff; border-color: #4da3ff; }
-        .admin-btn.yellow { color: #ffc34d; border-color: #ffc34d; }
+        .adm-btn.blue { color: #4da3ff; border-color: #4da3ff; }
+        .adm-btn.yellow { color: #f7c843; border-color: #f7c843; }
+        .adm-btn.red { color: #ff4d4d; border-color: #ff4d4d; }
+
+        #replyBox {
+            display: none;
+            margin-bottom: 18px;
+        }
+
+        #replyField {
+            width: 100%;
+            padding: 12px;
+            background: #111214;
+            border: 1px solid #1b1c1f;
+            border-radius: 14px;
+            font-size: 15px;
+            color: #fff;
+            margin-bottom: 10px;
+            outline: none;
+        }
+
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="header">Deveam Support</div>
+<div class="wrap">
 
-    <div id="userPanel" class="glass">
-        <textarea id="text" rows="3" placeholder="Введите ваш вопрос..."></textarea>
+    <div class="title">Поддержка Deveam</div>
+
+    <div id="userPanel">
+        <div class="input-box">
+            <textarea id="text" placeholder="Введите ваш вопрос..."></textarea>
+        </div>
         <button class="btn" onclick="sendTicket()">Отправить</button>
     </div>
 
-    <div id="adminReplyPanel" class="glass" style="display:none;">
-        <input id="replyInput" placeholder="Ответить на тикет...">
+    <div id="replyBox">
+        <input id="replyField" placeholder="Введите ответ...">
         <button class="btn" onclick="sendReply()">Отправить ответ</button>
     </div>
 
-    <div class="glass">
-        <div id="tickets"></div>
-    </div>
+    <div id="tickets"></div>
+
 </div>
 
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <script>
+
     let tg = window.Telegram.WebApp;
     tg.expand();
 
     let user = tg.initDataUnsafe.user;
     let ADMIN = 8339987136;
-    let isAdmin = (user.id == ADMIN);
+    let isAdmin = (user.id === ADMIN);
 
-    const API = "https://gimmicky-seamlessly-reinaldo.ngrok-free.dev"; // ⭐ ВСТАВЬ СВОЙ NGROK
+    const API = "https://YOUR-NGROK.ngrok-free.dev"; // ⭐ ОБЯЗАТЕЛЬНО ВСТАВЬ!
 
     let selectedTicket = null;
 
+
     if (isAdmin) {
         document.getElementById("userPanel").style.display = "none";
-        document.getElementById("adminReplyPanel").style.display = "block";
+        document.getElementById("replyBox").style.display = "block";
     }
+
 
     function sendTicket() {
         let text = document.getElementById("text").value.trim();
-        if (!text) return tg.showAlert("Введите сообщение!");
+        if (!text) return tg.showAlert("Введите сообщение");
 
         fetch(API + "/new_ticket", {
             method: "POST",
@@ -175,59 +202,57 @@
         });
 
         document.getElementById("text").value = "";
-        tg.showPopup({title: "✅ Отправлено", message: "Ваш тикет создан"});
+        tg.showPopup({title: "✅ Готово", message: "Ваш вопрос отправлен!"});
     }
 
-    function renderTickets(tickets) {
-        let box = document.getElementById("tickets");
-        box.innerHTML = "";
-
-        tickets.forEach(t => {
-            let div = document.createElement("div");
-            div.className = "ticket";
-
-            div.innerHTML = `
-                <div class="ticket-header">
-                    <span>#${t.id}</span>
-                    <span>@${t.username}</span>
-                </div>
-
-                <div style="margin-top: 8px; font-size:15px;">${t.text}</div>
-
-                <div class="status ${t.status}">
-                    ${t.status === "open" ? "🔵 Открыт" :
-                      t.status === "pending" ? "🟡 На рассмотрении" :
-                      "✅ Закрыт"}
-                </div>
-            `;
-
-            if (isAdmin) {
-                let controls = document.createElement("div");
-                controls.className = "admin-controls";
-
-                controls.innerHTML = `
-                    <button class="admin-btn blue" onclick="setStatus(${t.id}, 'open')">Открыт</button>
-                    <button class="admin-btn yellow" onclick="setStatus(${t.id}, 'pending')">Рассмотрение</button>
-                    <button class="admin-btn red" onclick="setStatus(${t.id}, 'closed')">Закрыт</button>
-                `;
-
-                div.appendChild(controls);
-
-                div.onclick = () => {
-                    selectedTicket = t.id;
-                    document.getElementById("replyInput").value = "";
-                };
-            }
-
-            box.appendChild(div);
-        });
-    }
 
     function loadTickets() {
         fetch(API + "/tickets?user_id=" + user.id)
         .then(r => r.json())
-        .then(renderTickets);
+        .then(data => renderTickets(data));
     }
+
+
+    function renderTickets(tickets) {
+        let block = document.getElementById("tickets");
+        block.innerHTML = "";
+
+        tickets.forEach(t => {
+
+            let card = document.createElement("div");
+            card.className = "card";
+
+            card.innerHTML = `
+                <div class="ticket-id">#${t.id} • @${t.username}</div>
+                <div class="ticket-text">${t.text}</div>
+                <div class="status ${t.status}">
+                    ${t.status === "open" ? "🔵 Открыт" :
+                       t.status === "pending" ? "🟡 На рассмотрении" :
+                       "✅ Закрыт"}
+                </div>
+            `;
+
+            if (isAdmin) {
+                let adminBtns = document.createElement("div");
+                adminBtns.className = "admin-buttons";
+
+                adminBtns.innerHTML = `
+                    <div class="adm-btn blue" onclick="setStatus(${t.id}, 'open')">Открыт</div>
+                    <div class="adm-btn yellow" onclick="setStatus(${t.id}, 'pending')">Рассмотрение</div>
+                    <div class="adm-btn red" onclick="setStatus(${t.id}, 'closed')">Закрыт</div>
+                `;
+
+                card.appendChild(adminBtns);
+
+                card.onclick = () => {
+                    selectedTicket = t.id;
+                };
+            }
+
+            block.appendChild(card);
+        });
+    }
+
 
     function setStatus(id, status) {
         fetch(API + "/update_status", {
@@ -237,23 +262,27 @@
         });
     }
 
+
     function sendReply() {
-        if (!selectedTicket) return tg.showAlert("Выберите тикет!");
+        if (!selectedTicket) return tg.showAlert("Выберите тикет");
 
         fetch(API + "/reply", {
             method: "POST",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify({
                 id: selectedTicket,
-                answer: document.getElementById("replyInput").value
+                answer: document.getElementById("replyField").value
             })
         });
 
-        tg.showPopup({title: "✅ Отправлено", message: "Ответ отправлен"});
+        document.getElementById("replyField").value = "";
+        tg.showPopup({title: "✅ Отправлено", message: "Ответ отправлен!"});
     }
 
-    setInterval(loadTickets, 1500);
+
+    setInterval(loadTickets, 1200);
     loadTickets();
+
 </script>
 
 </body>
